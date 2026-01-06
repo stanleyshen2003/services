@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab
+spec:
+  destination:
+    namespace: 'gitlab'
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: https://charts.gitlab.io/
+    targetRevision: 9.6.2
+    helm:
+      parameters:
+        - name: upgradeCheck.enabled
+          value: 'false'
+        - name: global.hosts.domain
+          value: stanley.service
+        - name: global.hosts.externalIP
+          value: 10.100.110.51
+        - name: global.hosts.https
+          value: 'false'
+        - name: global.ingress.configureCertmanager
+          value: 'false'
+        - name: installCertmanager
+          value: 'false'
+      values: |-
+        certmanager-issuer:
+            email: admin@stanley.service
+        global:
+            ingress:
+                tls:
+                    enabled: false
+    chart: gitlab
+  sources: []
+  project: infra
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+project: infra
+
+  

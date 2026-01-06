@@ -1,0 +1,21 @@
+project: infra
+source:
+  repoURL: https://helm.goharbor.io
+  targetRevision: 1.18.0
+  helm:
+    parameters:
+      - name: expose.ingress.hosts.core
+        value: harbor.stanley.service
+      - name: harborAdminPassword
+        value: stanleyshen
+      - name: externalURL
+        value: https://harbor.stanley.service
+      - name: expose.ingress.className
+        value: nginx
+  chart: harbor
+destination:
+  server: https://kubernetes.default.svc
+  namespace: harbor
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
